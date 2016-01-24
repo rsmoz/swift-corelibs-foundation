@@ -16,12 +16,16 @@ import Glibc
 
 import CoreFoundation
 
-public struct NSOperatingSystemVersion {
+public struct NSOperatingSystemVersion : Comparable {
     public var majorVersion: Int
     public var minorVersion: Int
     public var patchVersion: Int
     public init() {
         self.init(majorVersion: 0, minorVersion: 0, patchVersion: 0)
+    }
+    
+    public init(_ majorVersion: Int, _ minorVersion: Int, _ patchVersion: Int) {
+        self.init(majorVersion: majorVersion, minorVersion: minorVersion, patchVersion: patchVersion)
     }
     
     public init(majorVersion: Int, minorVersion: Int, patchVersion: Int) {
@@ -31,6 +35,19 @@ public struct NSOperatingSystemVersion {
     }
 }
 
+public func ==(lhs: NSOperatingSystemVersion, rhs: NSOperatingSystemVersion) -> Bool {
+    let lhsTuple = (lhs.majorVersion, lhs.minorVersion, lhs.patchVersion)
+    let rhsTuple = (rhs.majorVersion, rhs.minorVersion, rhs.patchVersion)
+    
+    return lhsTuple == rhsTuple
+}
+
+public func <(lhs: NSOperatingSystemVersion, rhs: NSOperatingSystemVersion) -> Bool {
+    let lhsTuple = (lhs.majorVersion, lhs.minorVersion, lhs.patchVersion)
+    let rhsTuple = (rhs.majorVersion, rhs.minorVersion, rhs.patchVersion)
+    
+    return lhsTuple < rhsTuple
+}
 
 
 public class NSProcessInfo : NSObject {
@@ -139,26 +156,7 @@ public class NSProcessInfo : NSObject {
     }
     
     public func isOperatingSystemAtLeastVersion(version: NSOperatingSystemVersion) -> Bool {
-        let ourVersion = operatingSystemVersion
-        if ourVersion.majorVersion < version.majorVersion {
-            return false
-        }
-        if ourVersion.majorVersion > version.majorVersion {
-            return true
-        }
-        if ourVersion.minorVersion < version.minorVersion {
-            return false
-        }
-        if ourVersion.minorVersion > version.minorVersion {
-            return true
-        }
-        if ourVersion.patchVersion < version.patchVersion {
-            return false
-        }
-        if ourVersion.patchVersion > version.patchVersion {
-            return true
-        }
-        return true
+        return operatingSystemVersion >= version
     }
     
     public var systemUptime: NSTimeInterval {

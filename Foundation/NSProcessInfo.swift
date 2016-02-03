@@ -16,7 +16,7 @@ import Glibc
 
 import CoreFoundation
 
-public struct NSOperatingSystemVersion : Comparable {
+public struct NSOperatingSystemVersion {
     public var majorVersion: Int
     public var minorVersion: Int
     public var patchVersion: Int
@@ -24,14 +24,16 @@ public struct NSOperatingSystemVersion : Comparable {
         self.init(majorVersion: 0, minorVersion: 0, patchVersion: 0)
     }
     
-    public init(_ majorVersion: Int, _ minorVersion: Int, _ patchVersion: Int) {
-        self.init(majorVersion: majorVersion, minorVersion: minorVersion, patchVersion: patchVersion)
-    }
-    
     public init(majorVersion: Int, minorVersion: Int, patchVersion: Int) {
         self.majorVersion = majorVersion
         self.minorVersion = minorVersion
         self.patchVersion = patchVersion
+    }
+}
+
+public extension NSOperatingSystemVersion : Comparable {
+     public init(_ majorVersion: Int, _ minorVersion: Int, _ patchVersion: Int) {
+        self.init(majorVersion: majorVersion, minorVersion: minorVersion, patchVersion: patchVersion)
     }
 }
 
